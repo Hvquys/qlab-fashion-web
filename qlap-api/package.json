@@ -1,0 +1,24 @@
+{
+  "name": "qlap-api",
+  "version": "1.0.0",
+  "description": "Backend for Q-Lab VN Fashion Store",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [],
+  "author": "hvquys",
+  "license": "ISC",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

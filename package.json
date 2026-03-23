@@ -1,0 +1,17 @@
+{
+  "name": "qlab-fashion-web",
+  "description": "Q-Lab VN Fashion Store",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "hvquys",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm run dev --prefix qlap-web",
+    "server": "npm run dev --prefix qlap-api",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
