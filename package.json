@@ -6,8 +6,8 @@
   "author": "hvquys",
   "license": "ISC",
   "scripts": {
-    "client": "npm run dev --prefix qlap-app",
-    "server": "npm run dev --prefix qlap-server",
+    "client": "npm run dev --prefix qlab-app",
+    "server": "npm run dev --prefix qlab-server",
     "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "devDependencies": {
