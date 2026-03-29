@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import logger from './utils/logger.js';
 import connectDB from './config/db.js';
 import productRoutes from "./routes/productRoutes.js";
@@ -10,18 +11,22 @@ connectDB();
 const server = express();
 const API_PREFIX = '/api/v1';
 
-// 1. Middleware giải mã JSON (Phải đặt trên cùng)
+// --- MIDDLEWARE ---
+// 1. CORS phải đặt TRÊN CÙNG để "mở cửa" cho Frontend trước khi xử lý route
+server.use(cors());
+
+// 2. Giải mã JSON
 server.use(express.json());
 
-// 2. Định nghĩa các Route
+// --- ROUTES ---
 server.get('/', (req, res) => {
     res.send('API is running!');
 });
 
-// SỬA Ở ĐÂY: Dùng dấu huyền ` và đặt trước server.listen
+// Chú ý: Route của bạn bây giờ là /api/v1/products
 server.use(`${API_PREFIX}/products`, productRoutes);
 
-// 3. Cuối cùng mới cho Server lắng nghe
+// --- START SERVER ---
 const port = process.env.PORT || 5000;
 server.listen(port, () => {
     const mode = process.env.NODE_ENV || 'development';
