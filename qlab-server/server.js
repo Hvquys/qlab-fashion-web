@@ -4,6 +4,7 @@ import cors from 'cors';
 import logger from './utils/logger.js';
 import connectDB from './config/db.js';
 import productRoutes from "./routes/productRoutes.js";
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ server.get('/', (req, res) => {
 
 // Chú ý: Route của bạn bây giờ là /api/v1/products
 server.use(`${API_PREFIX}/products`, productRoutes);
+server.use(`${API_PREFIX}/users`, userRoutes);
 
 // --- START SERVER ---
 const port = process.env.PORT || 5000;

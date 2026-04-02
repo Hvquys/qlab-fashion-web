@@ -5,22 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8e98907-f184-44b4-86f5-cf0be1bb4a17" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/qlab-app/src/components/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-app/src/components/Header.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-app/src/components/ProductCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-app/src/layouts/MainLayout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-app/src/screens/HomeScreen.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-app/src/screens/ProductScreen.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-app/src/screens/ShopScreen.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/controllers/userController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/middleware/authMiddleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/category.model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/product.model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/user.Model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/routes/userRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/utils/generateToken.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qlab-app/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-app/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qlab-app/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-app/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qlab-app/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-app/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qlab-app/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-app/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-app/src/components/ProductCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-app/src/components/ProductCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qlab-server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -75,7 +88,9 @@
       <workItem from="1774353811061" duration="149000" />
       <workItem from="1774353994886" duration="9347000" />
       <workItem from="1774685678165" duration="21070000" />
-      <workItem from="1774773750382" duration="6824000" />
+      <workItem from="1774773750382" duration="11883000" />
+      <workItem from="1774948476359" duration="3651000" />
+      <workItem from="1775120529359" duration="321000" />
     </task>
     <servers />
   </component>
