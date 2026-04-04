@@ -1,22 +1,14 @@
 import express from 'express';
-import upload from '../config/cloudinaryConfig.js';
-import {
-    getProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-} from '../controllers/productController.js';
+import { createProduct, getProducts, getProductById, deleteProduct } from '../controllers/productController.js';
+import { protect, admin } from '../middlewares/authMiddleware.js';
+import { upload } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.route('/')
-    .get(getProducts)
-    .post(upload.single('image'), createProduct); // 'image' là tên field gửi từ frontend
-
-router.route('/:id')
-    .get(getProductById)
-    .put(upload.single('image'), updateProduct)
-    .delete(deleteProduct);
+router.get('/', getProducts);
+router.get('/:id', getProductById);
+// Chặn quyền Admin và cấu hình multer nhận tối đa 5 file ảnh
+router.post('/', protect, admin, upload.array('images', 5), createProduct);
+router.delete('/:id', protect, admin, deleteProduct);
 
 export default router;

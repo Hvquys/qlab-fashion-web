@@ -5,11 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8e98907-f184-44b4-86f5-cf0be1bb4a17" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/qlab-server/services/auth.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-server/services/order.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-server/services/product.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qlab-server/services/review.service.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/config/cloudinary.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/controllers/authController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/controllers/categoryController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/controllers/productController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/controllers/userController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/middlewares/authMiddleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/middlewares/errorMiddleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/middlewares/uploadMiddleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/Cart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/Category.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/Order.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/Product.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/Review.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/User.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/models/schemas/Image.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/routes/authRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/routes/categoryRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/qlab-server/utils/cloudinaryUpload.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/config/cloudinaryConfig.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/middleware/authMiddleware.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/cart.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/category.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/order.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/product.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/review.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/models/user.Model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/routes/productRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/routes/productRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/routes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/routes/userRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qlab-server/utils/generateToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/qlab-server/utils/generateToken.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +55,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4,
@@ -78,7 +111,7 @@
       <workItem from="1774685678165" duration="21070000" />
       <workItem from="1774773750382" duration="11883000" />
       <workItem from="1774948476359" duration="3651000" />
-      <workItem from="1775120529359" duration="1644000" />
+      <workItem from="1775120529359" duration="17766000" />
     </task>
     <servers />
   </component>
