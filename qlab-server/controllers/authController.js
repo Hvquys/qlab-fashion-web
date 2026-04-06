@@ -1,122 +1,100 @@
-import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { generateTokens } from '../utils/generateToken.js';
 
-// @desc    Đăng ký user mới & trả về token
+// Hàm Helper tạo bộ đôi Token
+const generateTokens = (userId) => {
+    // Access Token sống ngắn hạn (ví dụ: 15 phút)
+    const accessToken = jwt.sign(
+        { id: userId },
+        process.env.JWT_ACCESS_SECRET,
+        { expiresIn: '15m' }
+    );
+
+    // Refresh Token sống dài hạn (ví dụ: 7 ngày)
+    const refreshToken = jwt.sign(
+        { id: userId },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: '7d' }
+    );
+
+    return { accessToken, refreshToken };
+};
+
+// @desc    Đăng ký người dùng mới
 // @route   POST /api/v1/auth/register
-// @access  Public
-export const registerUser = asyncHandler(async (req, res) => {
-    const { fullName, email, password } = req.body;
-
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-        res.status(400);
-        throw new Error('Email này đã được đăng ký trong hệ thống');
-    }
-
-    const user = await User.create({ fullName, email, password });
-
-    if (user) {
-        const accessToken = generateTokens(res, user._id);
-        res.status(201).json({
-            success: true,
-            message: "Đăng ký tài khoản thành công",
-            data: {
-                user: { _id: user._id, fullName: user.fullName, email: user.email, role: user.role },
-                accessToken
-            }
-        });
-    } else {
-        res.status(400);
-        throw new Error('Dữ liệu đầu vào không hợp lệ');
-    }
-});
-
-// @desc    Đăng nhập user & trả về token
-// @route   POST /api/v1/auth/login
-// @access  Public
-export const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        const accessToken = generateTokens(res, user._id);
-
-        // Lưu refresh token vào DB (Phục vụ việc Admin có thể revoke/thu hồi token nếu nghi ngờ bị hack)
-        user.refreshToken = req.cookies.refreshToken;
-        await user.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Đăng nhập thành công",
-            data: {
-                user: { _id: user._id, fullName: user.fullName, role: user.role },
-                accessToken
-            }
-        });
-    } else {
-        res.status(401);
-        throw new Error('Email hoặc mật khẩu không chính xác');
-    }
-});
-
-// @desc    Cấp lại Access Token mới dựa vào Refresh Token trong Cookie
-// @route   POST /api/v1/auth/refresh-token
-// @access  Public (Nhưng yêu cầu phải có Cookie)
-export const refreshToken = asyncHandler(async (req, res) => {
-    // Lấy refresh token từ HttpOnly Cookie
-    const token = req.cookies.refreshToken;
-
-    if (!token) {
-        res.status(401);
-        throw new Error('Không tìm thấy Refresh Token, vui lòng đăng nhập lại');
-    }
-
+export const register = async (req, res) => {
     try {
-        // Giải mã Refresh Token
-        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        const { fullName, email, password } = req.body;
 
-        // Kiểm tra xem User có tồn tại và token có khớp với DB không
-        const user = await User.findById(decoded.userId);
-        if (!user || user.refreshToken !== token) {
-            res.status(403);
-            throw new Error('Refresh Token không hợp lệ hoặc đã bị thu hồi');
+        // 1. Kiểm tra xem email đã tồn tại chưa
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ success: false, message: 'Email này đã được sử dụng!' });
         }
 
-        // Cấp phát lại bộ Token mới (Bảo mật: JWT Rotation)
-        const newAccessToken = generateTokens(res, user._id);
-        user.refreshToken = req.cookies.refreshToken; // Cập nhật lại token mới vào DB
-        await user.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Làm mới token thành công",
-            data: { accessToken: newAccessToken }
+        // 2. Tạo User mới (Mongoose sẽ tự lo các trường default và mã hóa password)
+        const user = await User.create({
+            fullName,
+            email,
+            password
         });
+
+        if (user) {
+            res.status(201).json({
+                success: true,
+                message: 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.'
+            });
+        }
     } catch (error) {
-        res.status(403);
-        throw new Error('Refresh Token đã hết hạn, vui lòng đăng nhập lại');
+        res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
     }
-});
+};
 
-// @desc    Đăng xuất (Xóa Cookie & Xóa Token trong DB)
-// @route   POST /api/v1/auth/logout
-// @access  Private
-export const logoutUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-        user.refreshToken = null; // Xóa token trong DB
-        await user.save();
+// @desc    Đăng nhập
+// @route   POST /api/v1/auth/login
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // 1. Tìm user theo email
+        const user = await User.findOne({ email });
+
+        // 2. Kiểm tra user có tồn tại và password có khớp không
+        if (user && (await user.matchPassword(password))) {
+
+            // 3. Tạo Tokens
+            const { accessToken, refreshToken } = generateTokens(user._id);
+
+            // 4. Lưu refreshToken vào Database (để quản lý phiên, cho phép Admin thu hồi nếu cần)
+            user.refreshToken = refreshToken;
+            await user.save();
+
+            // 5. Gắn Refresh Token vào HttpOnly Cookie (Bảo mật chống XSS)
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // Chỉ bật secure (HTTPS) khi lên Production
+                sameSite: 'strict', // Chống tấn công CSRF
+                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 ngày
+            });
+
+            // 6. Trả Access Token và thông tin User về cho Frontend (Tuyệt đối không trả password)
+            res.status(200).json({
+                success: true,
+                message: 'Đăng nhập thành công',
+                data: {
+                    user: {
+                        _id: user._id,
+                        fullName: user.fullName,
+                        email: user.email,
+                        role: user.role
+                    },
+                    accessToken
+                }
+            });
+        } else {
+            res.status(401).json({ success: false, message: 'Email hoặc mật khẩu không chính xác' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
     }
-
-    // Xóa cookie trên trình duyệt
-    res.cookie('refreshToken', '', {
-        httpOnly: true,
-        expires: new Date(0)
-    });
-
-    res.status(200).json({ success: true, message: 'Đăng xuất thành công' });
-});
+};

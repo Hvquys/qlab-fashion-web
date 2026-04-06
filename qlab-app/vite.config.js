@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,6 +9,12 @@ export default defineConfig({
       react(),
       tailwindcss(),
   ],
+    resolve: {
+        alias: {
+            // Ở đây chúng ta SỬ DỤNG fileURLToPath, ESLint sẽ không mắng nữa
+            "@": fileURLToPath(new URL('./src', import.meta.url)),
+        },
+    },
   server: {
     proxy: {
       '/api/v1': 'http://localhost:5000',

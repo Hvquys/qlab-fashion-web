@@ -1,21 +1,12 @@
 import express from 'express';
-import {
-    addAddress,
-    updateAddress,
-    deleteAddress,
-    setDefaultAddress
-} from '../controllers/userController.js';
+import { getUserProfile, updateAddress } from '../controllers/userController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Tất cả các route liên quan đến sổ địa chỉ đều cần phải đăng nhập
-router.use(protect);
+router.use(protect); // Yêu cầu đăng nhập
 
-// Prefix định tuyến trong server.js sẽ là /api/v1/users
-router.post('/addresses', addAddress);
-router.put('/addresses/:addressId', updateAddress);
-router.delete('/addresses/:addressId', deleteAddress);
-router.put('/addresses/:addressId/default', setDefaultAddress);
+router.get('/profile', getUserProfile);
+router.put('/address', updateAddress); // Dùng PUT vì đây là hành động cập nhật
 
 export default router;

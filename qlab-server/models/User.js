@@ -1,34 +1,38 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { imageSchema } from './schemas/Image.js';
-
-const addressSchema = new mongoose.Schema({
-    receiverName: { type: String, required: true },
-    phone: { type: String, required: true },
-    province: { type: String, required: true },
-    district: { type: String, required: true },
-    ward: { type: String, required: true },
-    detail: { type: String, required: true },
-    isDefault: { type: Boolean, default: false }
-});
 
 const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, index: true, lowercase: true },
     password: { type: String, required: true },
-    avatar: imageSchema,
     role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
-    addresses: [addressSchema], // Double Embedding
+
+    // Lưu thẳng 1 địa chỉ duy nhất
+    address: {
+        receiverName: { type: String },
+        phone: { type: String },
+        province: { type: String },
+        district: { type: String },
+        ward: { type: String },
+        detail: { type: String }
+    },
+
     refreshToken: { type: String, default: null }
 }, { timestamps: true });
 
-// Tự động băm mật khẩu trước khi lưu
-userSchema.pre('save', async function (next) {
+// Tự động băm mật khẩu trước khi lưu (Chuẩn Mongoose 6+ dùng async/await)
+userSchema.pre('save', async function () {
+    // Nếu password không bị thay đổi, chỉ return để thoát hàm, tuyệt đối KHÔNG dùng next()
     if (!this.isModified('password')) {
-        next();
+        return;
     }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 });
+
+// Hàm custom: So sánh mật khẩu người dùng nhập vào với mật khẩu băm trong DB
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
 
 export default mongoose.model('User', userSchema);

@@ -1,43 +1,34 @@
 import jwt from 'jsonwebtoken';
-import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 
-// 1. Middleware kiểm tra đăng nhập (Bảo vệ Route)
-export const protect = asyncHandler(async (req, res, next) => {
+// Kiểm tra User đã đăng nhập chưa
+export const protect = async (req, res, next) => {
     let token;
-
-    // Kiểm tra header Authorization có chứa chuỗi 'Bearer' không
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
-            // Tách lấy token (Bỏ chữ 'Bearer ')
-            token = req.headers.authorization.split(' ')[1];
+            token = req.headers.authorization.split(' ')[1]; // Lấy token từ header
 
-            // Giải mã token bằng Secret Key
+            // Giải mã token để lấy ID user
             const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-            // Tìm user trong DB dựa vào userId lưu trong token, và gán vào req.user
-            // Dùng .select('-password') để loại bỏ field password khỏi kết quả trả về
-            req.user = await User.findById(decoded.userId).select('-password');
-
-            next(); // Vượt qua trạm kiểm soát, cho phép đi tiếp vào Controller
+            // Tìm user trong DB và loại bỏ trường password không trả về
+            req.user = await User.findById(decoded.id).select('-password');
+            next();
         } catch (error) {
-            res.status(401);
-            throw new Error('Không có quyền truy cập: Token không hợp lệ hoặc đã hết hạn');
+            return res.status(401).json({ success: false, message: 'Token không hợp lệ hoặc đã hết hạn!' });
         }
     }
 
     if (!token) {
-        res.status(401);
-        throw new Error('Không có quyền truy cập: Không tìm thấy Token');
+        return res.status(401).json({ success: false, message: 'Không có quyền truy cập, vui lòng đăng nhập!' });
     }
-});
+};
 
-// 2. Middleware phân quyền Admin (Chỉ dùng cho các route của quản trị)
+// Kiểm tra User có phải Admin không
 export const admin = (req, res, next) => {
     if (req.user && req.user.role === 'ADMIN') {
-        next(); // Hợp lệ là Admin, cho đi tiếp
+        next();
     } else {
-        res.status(403); // 403 Forbidden: Cấm truy cập
-        throw new Error('Truy cập bị từ chối: Yêu cầu quyền Quản trị viên (Admin)');
+        return res.status(403).json({ success: false, message: 'Truy cập bị từ chối! Yêu cầu quyền Admin.' });
     }
 };
